@@ -24,21 +24,21 @@ public class Main {
 
         //Найти сотрудника с МИНимальной ЗП
         System.out.println();
-        System.out.println("Сотрудник с минимальной ЗП = " + Employee.calculateSalaryMin(employees));
-        System.out.println(Employee.findEmployeeWithMinSalary(employees));
+        System.out.println("Сотрудник с минимальной ЗП = " + calculateSalaryMin(employees));
+        System.out.println(findEmployeeWithMinSalary(employees));
 
         //Найти сотрудника с МАКсимальной ЗП
         System.out.println();
-        System.out.println("Сотрудник с максимальной ЗП = " + Employee.calculateSalaryMax(employees));
-        System.out.println(Employee.findEmployeeWithMaxSalary(employees));
+        System.out.println("Сотрудник с максимальной ЗП = " + calculateSalaryMax(employees));
+        System.out.println(findEmployeeWithMaxSalary(employees));
 
         //Посчитать СУММУ затрат на ЗП в месяц
         System.out.println();
-        System.out.println("Сумма затрат на ЗП в месяц = " + Employee.calculateSalary(employees));
+        System.out.println("Сумма затрат на ЗП в месяц = " + calculateSalary(employees));
 
         //Подсчитать среднее значение зарплат (можно использовать для этого метод из пункта b)
         System.out.println();
-        System.out.println("Среднее значение зарплат = " + Employee.calculateSalary(employees) / employees.length);
+        System.out.println("Среднее значение зарплат = " + calculateSalary(employees) / employees.length);
 
         //Распечатать ФИО всех сотрудников
         System.out.println();
@@ -50,5 +50,53 @@ public class Main {
     public static Employee createEmployee(String name, int department, int salary) {
         Employee employee = new Employee(name, department, salary);
         return employee;
+    }
+
+    public static int calculateSalaryMin(Employee[] employees) {
+        int min = employees[0].getSalary();
+        for (int i = 0; i < employees.length; i++) {
+            if (employees[i].getSalary() < min) {
+                min = employees[i].getSalary();
+            }
+        }
+        return min;
+    }
+
+    public static Employee findEmployeeWithMinSalary(Employee[] employees) {
+        Employee min = employees[0];
+        for (int i = 1; i < employees.length; i++) {
+            if (employees[i].getSalary() < min.getSalary()) {
+                min = employees[i];
+            }
+        }
+        return min;
+    }
+
+    public static Employee findEmployeeWithMaxSalary(Employee[] employees) {
+        Employee max = employees[0];
+        for (int i = 1; i < employees.length; i++) {
+            if (employees[i].getSalary() > max.getSalary()) {
+                max = employees[i];
+            }
+        }
+        return max;
+    }
+
+    public static int calculateSalaryMax(Employee[] employees) {
+        int max = 0;
+        for (int i = 0; i < employees.length; i++) {
+            if (employees[i].getSalary() > max) {
+                max = employees[i].getSalary();
+            }
+        }
+        return max;
+    }
+
+    public static int calculateSalary(Employee[] employees) {
+        int total = 0;
+        for (int i = 0; i < employees.length; i++) {
+            total += employees[i].getSalary();
+        }
+        return total;
     }
 }
