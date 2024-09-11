@@ -1,11 +1,17 @@
-
 public class Main {
+
+    public static Employee createEmployee(String name, int department, int salary) {
+        Employee employee = new Employee(name, department, salary);
+        return employee;
+    }
+
+    private static Employee[] employees = new Employee[10];
 
     public static void main(String[] args) {
 
         //Базовая сложность
         System.out.println("Базовая сложность");
-        Employee[] employees = new Employee[10];
+        System.out.println("Получить список всех сотрудников со всеми имеющимися по ним данными");
         employees[0] = createEmployee("Иванов Иван Иванович", 1, 1000);
         employees[1] = createEmployee("Петров Петр Петрович", 2, 2000);
         employees[2] = createEmployee("Сидоров Сергей Сергеевич", 3, 3000);
@@ -18,85 +24,223 @@ public class Main {
         employees[9] = createEmployee("Семенова Юлия Максимовна", 5, 10000);
         //Получить список всех сотрудников со всеми имеющимися по ним данными
         // (вывести в консоль значения всех полей (toString))
-        for (int i = 0; i < employees.length; i++) {
-            System.out.println("id:" + employees[i].getId() + " " + employees[i]);
-        }
+        print();
 
         //Найти сотрудника с МИНимальной ЗП
         System.out.println();
-        System.out.println("Сотрудник с минимальной ЗП = " + calculateSalaryMin(employees));
-        System.out.println(findEmployeeWithMinSalary(employees));
+        System.out.println("Найти сотрудника с МИНимальной ЗП");
+        System.out.println(findEmployeeWithMinSalary());
 
         //Найти сотрудника с МАКсимальной ЗП
         System.out.println();
-        System.out.println("Сотрудник с максимальной ЗП = " + calculateSalaryMax(employees));
-        System.out.println(findEmployeeWithMaxSalary(employees));
+        System.out.println("Найти сотрудника с МАКсимальной ЗП");
+        System.out.println(findEmployeeWithMaxSalary());
 
         //Посчитать СУММУ затрат на ЗП в месяц
         System.out.println();
-        System.out.println("Сумма затрат на ЗП в месяц = " + calculateSalary(employees));
+        System.out.println("Сумма затрат на ЗП в месяц = " + calculateSalary());
 
         //Подсчитать среднее значение зарплат (можно использовать для этого метод из пункта b)
         System.out.println();
-        System.out.println("Среднее значение зарплат = " + calculateSalary(employees) / employees.length);
+        System.out.println("Среднее значение зарплат = " + calculateSalary() / employees.length);
 
         //Распечатать ФИО всех сотрудников
         System.out.println();
-        for (int i = 0; i < employees.length; i++) {
-            System.out.println(employees[i].getName());
-        }
+        System.out.println("Распечатать ФИО всех сотрудников");
+        print2();
+
+        System.out.println();
+
+        System.out.println("Повышенная сложность");
+        System.out.println("____________________");
+        //Проиндексировать зарплату (вызвать изменение зп у всех сотрудников на величину аргумента в %)
+
+        System.out.println("Проиндексировать зарплату на " + indexationRate * 100 + "%");
+        indexSalaries();
+
+        //Сотрудник с МИНимальной зп по отделу
+        System.out.println("");
+        System.out.println("Сотрудник с МИНимальной ЗП по отделу " + departmentId);
+        System.out.println(employeesMinSalary());
+
+        //Сотрудник с МАКимольной ЗП по отделу
+        System.out.println("");
+        System.out.println("Сотрудник с МАКимальной ЗП по отделу " + departmentId);
+        System.out.println(employeesMaxSalary());
+
+        //Найти сумму затрат на ЗП по отделу
+        System.out.println("");
+        System.out.println("Сумму затрат на зп по отделу № " + departmentId + " =" + amountCostsDepartment());
+
+        //Найти среднюю ЗП по отделу
+        System.out.println("");
+        System.out.println("Средняя сумма зп по отделу: " + departmentId + " =" + averageCostAmountDepartment());
+
+        //Получить в качестве параметра номер отдела (1-5)
+        System.out.println("");
+        System.out.println("Напечатать всех сотрудников отдела № " + departmentId + " (все данные, кроме отдела)");
+        totalDepartment();
+
+        //Вывести сотрудников с зп МЕНЬШЕ числа
+        System.out.println("");
+        System.out.println("Сотрудники с зп меньше числа: " + minNumber);
+        employeesLessSalary();
+
+        //Вывести сотрудников с зп БОЛЬШЕ числа
+        System.out.println("");
+        System.out.println("Сотрудники с зп больше числа: " + maxNumber);
+        employeesHigherSalary();
+
     }
 
-    public static Employee createEmployee(String name, int department, int salary) {
-        Employee employee = new Employee(name, department, salary);
-        return employee;
-    }
+    //параметра номер отдела
+    static int departmentId = 1;
 
-    public static int calculateSalaryMin(Employee[] employees) {
-        int min = employees[0].getSalary();
-        for (int i = 0; i < employees.length; i++) {
-            if (employees[i].getSalary() < min) {
-                min = employees[i].getSalary();
-            }
-        }
-        return min;
-    }
+    // Параметр индексации зарплаты
+    static double indexationRate = 0.1;
 
-    public static Employee findEmployeeWithMinSalary(Employee[] employees) {
-        Employee min = employees[0];
-        for (int i = 1; i < employees.length; i++) {
-            if (employees[i].getSalary() < min.getSalary()) {
-                min = employees[i];
-            }
-        }
-        return min;
-    }
+    //Параметр числа с зп МЕНЬШЕ
+    static int minNumber = 4500;
 
-    public static Employee findEmployeeWithMaxSalary(Employee[] employees) {
-        Employee max = employees[0];
-        for (int i = 1; i < employees.length; i++) {
-            if (employees[i].getSalary() > max.getSalary()) {
-                max = employees[i];
-            }
-        }
-        return max;
-    }
+    //Параметр числа с зп БОЛЬШЕ
+    static int maxNumber = 5000;
 
-    public static int calculateSalaryMax(Employee[] employees) {
-        int max = 0;
-        for (int i = 0; i < employees.length; i++) {
-            if (employees[i].getSalary() > max) {
-                max = employees[i].getSalary();
-            }
-        }
-        return max;
-    }
-
-    public static int calculateSalary(Employee[] employees) {
+    //
+    public static int averageCostAmountDepartment() {
         int total = 0;
-        for (int i = 0; i < employees.length; i++) {
-            total += employees[i].getSalary();
+        for (Employee employee : employees) {
+            if (employee.getDepartment() == departmentId) {
+                total += employee.getSalary() / 2;
+            }
         }
         return total;
     }
+
+    //Найти сумму затрат на зп по отделу
+    public static int amountCostsDepartment() {
+        int total = 0;
+        for (Employee employee : employees) {
+            if (employee.getDepartment() == departmentId) {
+                total += employee.getSalary();
+            }
+        }
+        return total;
+    }
+
+    //Найти сотрудника с минимальной зп по отделу
+    private static Employee employeesMinSalary() {
+        Employee min = null;
+        for (Employee employee : employees) {
+            if (employee.getDepartment() == departmentId) {
+                if (min == null || min.getSalary() > employee.getSalary()) {
+                    min = employee;
+
+                }
+            }
+        }
+        return min;
+    }
+
+    //Найти сотрудника с макимальной зп по отделу
+    private static Employee employeesMaxSalary() {
+        Employee min = null;
+        for (Employee employee : employees) {
+            if (employee.getDepartment() == departmentId) {
+                if (min == null || min.getSalary() < employee.getSalary()) {
+                    min = employee;
+
+                }
+            }
+        }
+        return min;
+    }
+
+    //Напечатать всех сотрудников отдела (все данные, кроме отдела).
+    public static Employee totalDepartment() {
+        Employee departmentEmployees = employees[0];
+        for (Employee employee : employees) {
+            if (employee.getDepartment() == departmentId)
+                System.out.println("id:" + employee.getId() + " " + employee.getName() + ", зарплата " + employee.getSalary());
+        }
+        return departmentEmployees;
+    }
+
+    //Найти сотрудника с МИНимальной ЗП
+    public static Employee findEmployeeWithMinSalary() {
+        Employee min = employees[0];
+        for (Employee employee : employees) {
+            if (employee.getSalary() < min.getSalary()) {
+                min = employee;
+            }
+        }
+        return min;
+    }
+
+    //Найти сотрудника с МАКсимальной ЗП
+    public static Employee findEmployeeWithMaxSalary() {
+        Employee max = employees[0];
+        for (Employee employee : employees) {
+            if (employee.getSalary() > max.getSalary()) {
+                max = employee;
+            }
+        }
+        return max;
+    }
+
+    //Посчитать СУММУ затрат на ЗП в месяц
+    private static int calculateSalary() {
+        int total = 0;
+        for (Employee employee : employees) {
+            total += employee.getSalary();
+        }
+        return total;
+    }
+
+    //Проиндексировать зарплату
+    public static void indexSalaries() {
+        for (Employee employee : employees) {
+            double indexedSalary = employee.getSalary() + (employee.getSalary() * indexationRate);
+            employee.setSalary((int) indexedSalary);
+            System.out.println(employee.getName() + ", зарплата " + indexedSalary);
+        }
+    }
+
+    //Все сотрудники с зп МЕНЬШЕ числа (распечатать id, фио и зп в консоль)
+    public static Employee employeesLessSalary() {
+        Employee min = employees[0];
+        for (Employee employee : employees) {
+            if (employee.getSalary() < minNumber) {
+                min = employee;
+                System.out.println("id:" + employee.getId() + " " + employee);
+            }
+        }
+        return min;
+    }
+
+    //Все сотрудники с зп БОЛЬШЕ (или равно) числа (распечатать id, фио и зп в консоль)
+    public static Employee employeesHigherSalary() {
+        Employee min = employees[0];
+        for (Employee employee : employees) {
+            if (employee.getSalary() >= maxNumber) {
+                min = employee;
+                System.out.println("id:" + employee.getId() + " " + employee);
+            }
+        }
+        return min;
+    }
+
+    //Распечатать ФИО всех сотрудников
+    public static void print2() {
+        for (Employee employee : employees) {
+            System.out.println(employee.getName());
+        }
+    }
+
+    //Получить список всех сотрудников со всеми имеющимися по ним данными
+    public static void print() {
+        for (Employee employee : employees) {
+            System.out.println("id:" + employee.getId() + " " + employee);
+        }
+    }
+
 }
